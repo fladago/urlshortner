@@ -41,6 +41,8 @@ func (r *redisRepository) generateKey(code string) string {
 }
 
 func (r *redisRepository) Find(code string) (*shortener.Redirect, error) {
+	const baseParse = 10
+	const bitSize = 64
 	redirect := &shortener.Redirect{}
 	key := r.generateKey(code)
 	data, err := r.client.HGetAll(key).Result()
@@ -50,7 +52,7 @@ func (r *redisRepository) Find(code string) (*shortener.Redirect, error) {
 	if len(data) == 0 {
 		return nil, errors.Wrap(shortener.ErrRedirectNotFound, "repository.Redirect.Find")
 	}
-	createdAt, err := strconv.ParseInt(data["created_at"], 10, 64)
+	createdAt, err := strconv.ParseInt(data["created_at"], baseParse, bitSize)
 	if err != nil {
 		return nil, errors.Wrap(err, "repository.Redirect.Find")
 	}

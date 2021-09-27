@@ -18,10 +18,10 @@ type mongoRepository struct {
 	timeout  time.Duration
 }
 
-func newMongoClient(mongoUrl string, mongoTimeout int) (*mongo.Client, error) {
+func newMongoClient(mongoURL string, mongoTimeout int) (*mongo.Client, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(mongoTimeout)*time.Second)
 	defer cancel()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoUrl))
+	client, err := mongo.Connect(ctx, options.Client().ApplyURI(mongoURL))
 	if err != nil {
 		return nil, err
 	}
